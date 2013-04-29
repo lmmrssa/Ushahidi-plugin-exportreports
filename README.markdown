@@ -21,10 +21,10 @@ __NOTE: If activating plugin does not show CSV/XML button on report main page th
 	
 	<p>
 	
-	tag inside
+tag inside
 	
 	<div id="filter-controls">
 	
-	tag and add following code below__
+tag and add following code below__
 
     <?php Event::run('ushahidi_action.report_filters_controls_ui'); ?>
