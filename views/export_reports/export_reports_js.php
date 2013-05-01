@@ -123,6 +123,6 @@
 			out.push(key + '=' + urlParameters[key]);
 		}
 		outparam = out.join('&');
-		window.location.href = '<?php echo url::site().'reports/export_reports/'?>'+exp+'?'+outparam;
+		window.location.href = '<?php echo url::site().'export_reports/index/'?>'+exp+'?'+outparam;
 	}
 </script>
