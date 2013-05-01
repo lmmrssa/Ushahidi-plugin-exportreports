@@ -8,54 +8,50 @@ ob_start();
 	echo ",FIRST NAME,LAST NAME,EMAIL,APPROVED,VERIFIED";
 
 	// Incase a plugin would like to add some custom fields
-	$custom_headers = "";
 	Event::run('ushahidi_filter.report_download_csv_header', $custom_headers);
-	echo $custom_headers;
 
 	echo "\n";
 	foreach ($incidents as $incident) {
 		$incident_id = $incident->incident_id;
 		echo '"'.$incident->incident_id.'",';
-		echo '"'.reports::_csv_text($incident->incident_title).'",';
+		echo '"'.exportreports_helper::_csv_text($incident->incident_title).'",';
 		echo '"'.$incident->incident_date.'"';
-		echo ',"'.reports::_csv_text($incident->location_name).'"';
-		echo ',"'.reports::_csv_text($incident->incident_description).'"';
+		echo ',"'.exportreports_helper::_csv_text($incident->location_name).'"';
+		echo ',"'.exportreports_helper::_csv_text($incident->incident_description).'"';
 		echo ',"';
 		$incident->incident_category = ORM::Factory('category')->join('incident_category', 'category_id', 'category.id')->where('incident_id', $incident_id)->find_all();
 		foreach($incident->incident_category as $category) {
 			if ($category->category_title) {
-				echo reports::_csv_text($category->category_title) . ", ";
+				echo exportreports_helper::_csv_text($category->category_title) . ", ";
 			}
 		}
 		echo '"';
-		echo ',"'.reports::_csv_text($incident->latitude).'"';
-		echo ',"'.reports::_csv_text($incident->longitude).'"';
+		echo ',"'.exportreports_helper::_csv_text($incident->latitude).'"';
+		echo ',"'.exportreports_helper::_csv_text($incident->longitude).'"';
 		
 		$custom_fields = customforms::get_custom_form_fields($incident_id,'',false);
 		if ( ! empty($custom_fields)) {
 			foreach($custom_fields as $custom_field) {
-				echo ',"'.reports::_csv_text($custom_field['field_response']).'"';
+				echo ',"'.exportreports_helper::_csv_text($custom_field['field_response']).'"';
 			}
 		} else {
 			$custom_field = customforms::get_custom_form_fields('','',false);
 			foreach ($custom_field as $custom) {
-				echo ',"'.reports::_csv_text("").'"';
+				echo ',"'.exportreports_helper::_csv_text("").'"';
 			}
 		}
 		$incident_orm = ORM::factory('incident', $incident_id);
 		$incident_person = $incident_orm->incident_person;
 		if($incident_person->loaded) {
-			echo ',"'.reports::_csv_text($incident_person->person_first).'"'.',"'.reports::_csv_text($incident_person->person_last).'"'.
-					',"'.reports::_csv_text($incident_person->person_email).'"';
+			echo ',"'.exportreports_helper::_csv_text($incident_person->person_first).'"'.',"'.reports::_csv_text($incident_person->person_last).'"'.
+					',"'.exportreports_helper::_csv_text($incident_person->person_email).'"';
 		} else {
-			echo ',"'.reports::_csv_text("").'"'.',"'.reports::_csv_text("").'"'.',"'.reports::_csv_text("").'"';
+			echo ',"'.exportreports_helper::_csv_text("").'"'.',"'.exportreports_helper::_csv_text("").'"'.',"'.reports::_csv_text("").'"';
 		}
 		echo ($incident->incident_active) ? ",YES" : ",NO";
 		echo ($incident->incident_verified) ? ",YES" : ",NO";
 		// Incase a plugin would like to add some custom data for an incident
-		$event_data = array("report_csv" => "", "incident" => $incident);
-		Event::run('ushahidi_filter.report_download_csv_incident', $event_data);
-		echo $event_data['report_csv'];
+		Event::run('ushahidi_filter.report_download_csv_incident', $incident->incident_id);
 		echo "\n";
 	}
 	$report_csv = ob_get_clean();
