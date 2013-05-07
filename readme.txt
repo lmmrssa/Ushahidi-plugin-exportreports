@@ -14,12 +14,12 @@ Add export button on report index page to export filter on CSV/XML
 __NOTE:__
 If activating plugin does not show CSV/XML button on report main page then inside themes/default/views/reports/main.php view search for
  
-	<p>
-	
-tag inside
-
 	<div id="filter-controls">
+		<p>
+			<a href="#" class="small-link-button reset" id="reset_all_filters"><?php echo Kohana::lang('ui_main.reset_all_filters'); ?></a>
+			<a href="#" id="applyFilters" class="filter-button"><?php echo Kohana::lang('ui_main.filter_reports'); ?></a>
+		</p>
 	
-tag and add following code below
+and add following code below
 
-	<?php Event::run('ushahidi_action.report_filters_controls_ui'); ?>
+    <?php Event::run('ushahidi_action.report_filters_controls_ui'); ?>
