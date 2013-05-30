@@ -43,10 +43,10 @@ ob_start();
 		$incident_orm = ORM::factory('incident', $incident_id);
 		$incident_person = $incident_orm->incident_person;
 		if($incident_person->loaded) {
-			echo ',"'.exportreports_helper::_csv_text($incident_person->person_first).'"'.',"'.reports::_csv_text($incident_person->person_last).'"'.
+			echo ',"'.exportreports_helper::_csv_text($incident_person->person_first).'"'.',"'.exportreports_helper::_csv_text($incident_person->person_last).'"'.
 					',"'.exportreports_helper::_csv_text($incident_person->person_email).'"';
 		} else {
-			echo ',"'.exportreports_helper::_csv_text("").'"'.',"'.exportreports_helper::_csv_text("").'"'.',"'.reports::_csv_text("").'"';
+			echo ',"'.exportreports_helper::_csv_text("").'"'.',"'.exportreports_helper::_csv_text("").'"'.',"'.exportreports_helper::_csv_text("").'"';
 		}
 		echo ($incident->incident_active) ? ",YES" : ",NO";
 		echo ($incident->incident_verified) ? ",YES" : ",NO";
