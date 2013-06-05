@@ -6,20 +6,21 @@ author: HTSolution Pvt. Ltd.
 author website: http://himalayantechies.com
 
 == Description ==
-Add export button on report index page to export filter on CSV/XML
+*Add export button on report index page to export filter on CSV/XML
 
 == Installation ==
 1. Copy the entire /exportreports/ directory into your /plugins/ directory.
 2. Activate the plugin.
 __NOTE:__
-If activating plugin does not show CSV/XML button on report main page then inside themes/default/views/reports/main.php view search for
+1. XML feature will only show stylesheet for Firefox and IE
+2. If activating plugin does not show CSV/XML button on report main page then inside themes/default/views/reports/main.php view search for
  
-	<div id="filter-controls">
-		<p>
-			<a href="#" class="small-link-button reset" id="reset_all_filters"><?php echo Kohana::lang('ui_main.reset_all_filters'); ?></a>
-			<a href="#" id="applyFilters" class="filter-button"><?php echo Kohana::lang('ui_main.filter_reports'); ?></a>
-		</p>
+	<p>
 	
-and add following code below
+tag inside
 
-    <?php Event::run('ushahidi_action.report_filters_controls_ui'); ?>
+	<div id="filter-controls">
+	
+tag and add following code below
+
+	<?php Event::run('ushahidi_action.report_filters_controls_ui'); ?>
