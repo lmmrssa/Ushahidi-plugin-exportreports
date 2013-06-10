@@ -19,6 +19,7 @@ Installation
 
 __NOTE:__
 *XML feature will only show stylesheet for Firefox and IE
+*XML will be in zip for stylesheet you will have to extract it and then view.
 *If activating plugin does not show CSV/XML button on report main page then inside themes/default/views/reports/main.php view search for
 
 	<p>

@@ -13,7 +13,8 @@ author website: http://himalayantechies.com
 2. Activate the plugin.
 __NOTE:__
 1. XML feature will only show stylesheet for Firefox and IE
-2. If activating plugin does not show CSV/XML button on report main page then inside themes/default/views/reports/main.php view search for
+2. XML will be in zip for stylesheet you will have to extract it and then view.
+3. If activating plugin does not show CSV/XML button on report main page then inside themes/default/views/reports/main.php view search for
  
 	<p>
 	

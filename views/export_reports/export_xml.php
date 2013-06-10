@@ -3,13 +3,16 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 echo "<?xml-stylesheet type=\"text/xsl\" href=\"export.xsl\" ?>"; ?>
 <export xmlns:atom="http://www.w3.org/2005/Atom" xmlns:georss="http://www.georss.org/georss">
 <channel>
+	<copyright uri="http://himalayantechies.com">HimalayanTechies Pvt. Ltd.</copyright>
 	<updated><?php echo gmdate("c", time()); ?></updated>
+	<title><?php echo Kohana::config('settings.site_name'); ?></title>
+	<description><?php Kohana::config('settings.site_tagline'); ?></description>
 	<link rel="alternate" type="text/html" href="<?php echo url::base(); ?>"/>
-	<generator uri="<?php echo url::base(); ?>" version="1.0">Export Report Plugin - HTSolution</generator>
+	<generator uri="<?php echo 'https://github.com/HTSolution/Ushahidi-plugin-exportreports'; ?>" version="1.0">Export Report Plugin - HTSolution</generator>
 	<?php
 	// Event::report_download_xml_head - Add to the xml head
 	Event::run('ushahidi_action.report_download_xml_head');
-		
+
 	foreach ($incidents as $incident) {
 		echo '<item>';
 			echo '<id>'.$incident->incident_id.'</id>';
@@ -75,43 +78,48 @@ $nameVar = time().'_'.rand();
 $zipName = $nameVar.'.zip';
 $zipPath = SYSPATH.'../plugins/exportreports/tmpexport/'.$zipName;
 
+$error = '';
 $zip = new ZipArchive();
 if($zip->open($zipPath, ZIPARCHIVE::CREATE)!==TRUE){
-	$error .=  "* Sorry ZIP creation failed at this time<br/>";
-}
-$zip->addFile(SYSPATH.'../plugins/exportreports/css/export.xsl', 'export.xsl');
-$zip->addFromString($nameVar.'.xml', $report_xml);
-$zip->close();
-
-// Output to browser
-header("Pragma: public");
-header("Expires: 0");
-header('Content-type: application/zip');
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("Cache-Control: public");
-//header("Content-Transfer-Encoding: Binary");
-header('Content-Disposition: attachment; filename="'.$zipName.'"');
-header("Content-Length: ".filesize($zipPath));
-
-$fp = @fopen($zipPath, "rb");
-if ($fp) {
-	while(!feof($fp)) {
-		echo @fread($fp, 8192);
-		flush(); // this is essential for large downloads
-		if (connection_status() != 0 ) {
-			@fclose($fp);
-			die();
-		}
+	$error .= "* Sorry ZIP creation failed at this time<br/>";
+} else {
+	if(!$zip->addFile(SYSPATH.'../media/export_reports_readme.txt', 'readme.txt')) {
+		$error .= "* Sorry readme file failed to attach<br/>";
 	}
-	@fclose($fp);
+	if(!$zip->addFile(SYSPATH.'../plugins/exportreports/css/export.xsl', 'export.xsl')) {
+		$error .= "* Sorry Stylesheet file failed to attach<br/>";
+	}
+	if(!$zip->addFromString($nameVar.'.xml', $report_xml)) {
+		$error .= "* Sorry XML file not created<br/>";
+	}
+	$zip->close();
 }
-unlink($zipPath);
-
-// Output to browser
-/*header("Content-type: text/xml");
-header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-header("Content-Disposition: attachment; filename=" . time() . ".xml");
-header("Content-Length: " . strlen($report_xml));
-echo $report_xml;*/
+if(!empty($error)) {
+	echo $error;
+} else {
+	// Output to browser
+	header("Pragma: public");
+	header("Expires: 0");
+	header('Content-type: application/zip');
+	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+	header("Cache-Control: public");
+	//header("Content-Transfer-Encoding: Binary");
+	header('Content-Disposition: attachment; filename="'.$zipName.'"');
+	header("Content-Length: ".filesize($zipPath));
+	
+	$fp = @fopen($zipPath, "rb");
+	if ($fp) {
+		while(!feof($fp)) {
+			echo @fread($fp, 8192);
+			flush(); // this is essential for large downloads
+			if (connection_status() != 0 ) {
+				@fclose($fp);
+				die();
+			}
+		}
+		@fclose($fp);
+	}
+	unlink($zipPath);
+}
 exit;
 ?>
