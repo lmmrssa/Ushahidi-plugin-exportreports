@@ -83,10 +83,10 @@ $zip = new ZipArchive();
 if($zip->open($zipPath, ZIPARCHIVE::CREATE)!==TRUE){
 	$error .= "* Sorry ZIP creation failed at this time<br/>";
 } else {
-	if(!$zip->addFile(SYSPATH.'../media/export_reports_readme.txt', 'readme.txt')) {
+	if(!$zip->addFile(PLUGINPATH.'/exportreports/export_reports_readme.txt', 'readme.txt')) {
 		$error .= "* Sorry readme file failed to attach<br/>";
 	}
-	if(!$zip->addFile(SYSPATH.'../plugins/exportreports/css/export.xsl', 'export.xsl')) {
+	if(!$zip->addFile(PLUGINPATH.'exportreports/css/export.xsl', 'export.xsl')) {
 		$error .= "* Sorry Stylesheet file failed to attach<br/>";
 	}
 	if(!$zip->addFromString($nameVar.'.xml', $report_xml)) {

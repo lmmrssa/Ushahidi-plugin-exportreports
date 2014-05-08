@@ -6,7 +6,7 @@ class Exportreports_Install {
 	}
 
 	public function run_install() {
-		copy(SYSPATH.'../plugins/exportreports/export_reports_readme.txt', SYSPATH.'../media/export_reports_readme.txt');
+		//copy(SYSPATH.'../plugins/exportreports/export_reports_readme.txt', SYSPATH.'../media/export_reports_readme.txt');
 	}
 	
 	/**
@@ -14,7 +14,7 @@ class Exportreports_Install {
 	 *
 	 */
 	public function uninstall() {
-		@unlink(SYSPATH.'../media/export_reports_readme.txt');
+		//@unlink(SYSPATH.'../media/export_reports_readme.txt');
 	}
 
 }
