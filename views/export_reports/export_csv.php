@@ -55,9 +55,11 @@ ob_start();
 		echo "\n";
 	}
 	$report_csv = ob_get_clean();
-	header("Content-type: text/x-csv");
+	header("Content-Encoding: UTF-8");
+	header("Content-type: text/x-csv; charset=utf-8");
 	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 	header("Content-Disposition: attachment; filename=" . time() . ".csv");
 	header("Content-Length: " . strlen($report_csv));
+	echo "\xEF\xBB\xBF"; // UTF-8 BOM
 	echo $report_csv;
 ?>

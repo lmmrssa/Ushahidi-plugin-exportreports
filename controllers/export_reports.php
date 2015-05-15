@@ -43,7 +43,7 @@ class Export_reports_Controller extends Template_Controller {
 		if (empty($locale)) {
 			$locale = Kohana::config('locale.language.0');
 		}
-		$report_listing = new View('export_reports/export_'.$type);
+		$report_listing = View::factory('export_reports/export_'.$type);
 		$report_listing->incidents = reports::fetch_incidents();
 		print $report_listing;
 	}

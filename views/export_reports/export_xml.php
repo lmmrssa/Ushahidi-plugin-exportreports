@@ -100,7 +100,8 @@ if(!empty($error)) {
 	// Output to browser
 	header("Pragma: public");
 	header("Expires: 0");
-	header('Content-type: application/zip');
+	header("Content-Encoding: UTF-8");
+	header('Content-type: application/zip; charset=utf-8');
 	header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 	header("Cache-Control: public");
 	//header("Content-Transfer-Encoding: Binary");
